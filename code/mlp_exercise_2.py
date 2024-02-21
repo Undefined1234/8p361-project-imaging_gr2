@@ -81,4 +81,3 @@ def train_neural_network(nr_hidden_layers=1, nr_neurons=64, nr_epochs=10, activa
 train_neural_network(nr_hidden_layers=0) # experiment 1
 train_neural_network(nr_hidden_layers=3) # experiment 2
 train_neural_network(nr_hidden_layers=3, activation_function='linear') # experiment 3
-
