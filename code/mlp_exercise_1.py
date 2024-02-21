@@ -18,7 +18,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten, Dense
 from tensorflow.keras.callbacks import TensorBoard
 
-def train_neural_network(nr_hidden_layers=1, nr_neurons=64, activation_function='relu'):
+def train_neural_network(nr_hidden_layers=1, nr_neurons=64, nr_epochs=10, activation_function='relu'):
     # load the dataset using the builtin Keras method
     (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -65,17 +65,26 @@ def train_neural_network(nr_hidden_layers=1, nr_neurons=64, activation_function=
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
 
     # custom model name based on chosen number of hidden layers and neurons
-    model_name = f"mlp_ex_1_{nr_hidden_layers}_layers_{nr_neurons}_neurons_{activation_function}"
+    model_name = f"mlp_ex_1_{nr_hidden_layers}_layers_{nr_neurons}_neurons_{nr_epochs}_epochs_{activation_function}"
 
     # create a way to monitor our model in Tensorboard
     tensorboard = TensorBoard("logs/" + model_name)
 
     # train the model
-    model.fit(X_train, y_train, batch_size=32, epochs=10, verbose=1, validation_data=(X_val, y_val), callbacks=[tensorboard])
+    model.fit(X_train, y_train, batch_size=32, epochs=nr_epochs, verbose=1, validation_data=(X_val, y_val), callbacks=[tensorboard])
 
     score = model.evaluate(X_test, y_test, verbose=0)
 
-    print("Loss: ", score[0])
-    print("Accuracy: ", score[1])
+    print(f"{model_name} Loss: ", score[0])
+    print(f"{model_name} Accuracy: ", score[1])
 
-train_neural_network(1, 64, 'relu')
+train_neural_network(1, 32, 10, 'relu') # experiment 1
+train_neural_network(1, 64, 10, 'relu') # experiment 2
+train_neural_network(1, 64, 20, 'relu') # experiment 3
+train_neural_network(1, 64, 10, 'gelu') # experiment 4
+train_neural_network(1, 128, 10, 'relu') # experiment 5
+train_neural_network(2, 32, 10, 'relu') # experiment 6
+train_neural_network(2, 64, 10, 'relu') # experiment 7
+train_neural_network(2, 64, 20, 'relu') # experiment 8
+train_neural_network(2, 64, 10, 'gelu') # experiment 9
+train_neural_network(2, 128, 10, 'relu') # experiment 10
