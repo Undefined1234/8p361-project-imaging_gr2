@@ -57,7 +57,7 @@ def train_neural_network(nr_hidden_layers=1, nr_neurons=64, nr_epochs=10, activa
     model.add(Flatten(input_shape=(28,28,1))) 
     # fully connected hidden layers with chosen amount of neurons and ReLU nonlinearity
     for i in range(nr_hidden_layers):
-        model.add(Dense(nr_neurons, activation='relu'))
+        model.add(Dense(nr_neurons, activation=activation_function))
     # output layer with 10 nodes (one for each class) and softmax nonlinearity
     model.add(Dense(10, activation='softmax')) 
 
@@ -65,7 +65,7 @@ def train_neural_network(nr_hidden_layers=1, nr_neurons=64, nr_epochs=10, activa
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
 
     # custom model name based on chosen number of hidden layers and neurons
-    model_name = f"mlp_ex_1_{nr_hidden_layers}_layers_{nr_neurons}_neurons_{nr_epochs}_epochs_{activation_function}"
+    model_name = f"mlp_ex_2_{nr_hidden_layers}_layers_{nr_neurons}_neurons_{nr_epochs}_epochs_{activation_function}"
 
     # create a way to monitor our model in Tensorboard
     tensorboard = TensorBoard("logs/" + model_name)

@@ -57,7 +57,7 @@ def train_neural_network(nr_hidden_layers=1, nr_neurons=64, nr_epochs=10, activa
     model.add(Flatten(input_shape=(28,28,1))) 
     # fully connected hidden layers with chosen amount of neurons and ReLU nonlinearity
     for i in range(nr_hidden_layers):
-        model.add(Dense(nr_neurons, activation='relu'))
+        model.add(Dense(nr_neurons, activation=activation_function))
     # output layer with 10 nodes (one for each class) and softmax nonlinearity
     model.add(Dense(10, activation='softmax')) 
 
