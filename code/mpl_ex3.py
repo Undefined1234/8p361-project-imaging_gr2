@@ -71,7 +71,8 @@ tensorboard = TensorBoard("../logs/{}".format(model_name)) #initialize tensorboa
 
 model8.fit(X_train, y_train, batch_size=32, epochs=10, verbose=1, validation_data=(X_val, y_val), callbacks=[tensorboard]) #fit the training data to the model
 
-#Postprocessing
+#####################Postprocessing#####################
+
 score = model8.evaluate(X_test, y_test, verbose=0) #evaluate the model on the test set
 
 print("Loss: ",score[0])
