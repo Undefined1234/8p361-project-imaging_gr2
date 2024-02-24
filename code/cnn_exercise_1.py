@@ -18,7 +18,7 @@ from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 
 # unused for now, to be used for ROC analysis
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, RocCurveDisplay
 
 # the size of the images in the PCAM dataset
 IMAGE_SIZE = 96
@@ -73,7 +73,7 @@ def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filte
 model = get_model()
 
 # get the data generators
-train_gen, val_gen = get_pcam_generators('/change/me/to/dataset/path')
+train_gen, val_gen = get_pcam_generators('C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data')
 
 # save the model and weights
 model_name = 'my_first_cnn_model'

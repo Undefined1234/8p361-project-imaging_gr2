@@ -3,7 +3,6 @@ TU/e BME Project Imaging 2021
 Convolutional neural network for PCAM
 Author: Suzanne Wetstein
 '''
-
 # disable overly verbose tensorflow logging
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}   
@@ -13,18 +12,16 @@ import numpy as np
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Conv2D, MaxPool2D
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 
 # unused for now, to be used for ROC analysis
-from sklearn.metrics import roc_curve, auc
-
+from sklearn.metrics import roc_curve, auc, RocCurveDisplay
 
 # the size of the images in the PCAM dataset
 IMAGE_SIZE = 96
-
 
 def get_pcam_generators(base_dir, train_batch_size=32, val_batch_size=32):
 
@@ -50,7 +47,6 @@ def get_pcam_generators(base_dir, train_batch_size=32, val_batch_size=32):
 
      return train_gen, val_gen
 
-
 def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filters=64):
 
      # build the model
@@ -62,10 +58,9 @@ def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filte
      model.add(Conv2D(second_filters, kernel_size, activation = 'relu', padding = 'same'))
      model.add(MaxPool2D(pool_size = pool_size))
 
+     model.add(Conv2D(second_filters, (6,6), activation = 'relu', padding = 'valid'))
+     model.add(Conv2D(1, (1,1), activation = 'sigmoid', padding = 'valid'))
      model.add(Flatten())
-     model.add(Dense(64, activation = 'relu'))
-     model.add(Dense(1, activation = 'sigmoid'))
-
 
      # compile the model
      model.compile(SGD(learning_rate=0.01, momentum=0.95), loss = 'binary_crossentropy', metrics=['accuracy'])
@@ -76,14 +71,11 @@ def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filte
 # get the model
 model = get_model()
 
-
 # get the data generators
-train_gen, val_gen = get_pcam_generators('/change/me/to/dataset/path')
-
-
+train_gen, val_gen = get_pcam_generators('C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data')
 
 # save the model and weights
-model_name = 'my_first_cnn_model'
+model_name = 'my_second_cnn_model'
 model_filepath = model_name + '.json'
 weights_filepath = model_name + '_weights.hdf5'
 
@@ -109,5 +101,14 @@ history = model.fit(train_gen, steps_per_epoch=train_steps,
                     callbacks=callbacks_list)
 
 # ROC analysis
+# Getting labels and predictions on validation set
+val_true = val_gen.classes
+val_probs = model.predict(val_gen, steps=val_steps)
 
-# TODO Perform ROC analysis on the validation set
+# Calculating false positive rate (fpr), true positive rate (tpr) and AUC
+fpr, tpr, thresholds = roc_curve(val_true, val_probs)
+roc_auc = auc(fpr, tpr)
+
+# Generate ROC curve
+roc = RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=roc_auc)
+roc.plot()
