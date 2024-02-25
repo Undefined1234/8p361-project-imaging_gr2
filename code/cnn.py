@@ -108,6 +108,13 @@ history = model.fit(train_gen, steps_per_epoch=train_steps,
                     epochs=3,
                     callbacks=callbacks_list)
 
-# ROC analysis
 
-# TODO Perform ROC analysis on the validation set
+
+y_true = val_gen.classes
+y_predicted = model.predict(val_gen)
+
+fpr, tpr = roc_curve(y_true, y_predicted)
+auc = auc(fpr,tpr)
+
+RocCurveDisplay(fpr,tpr,auc).plot()
+
