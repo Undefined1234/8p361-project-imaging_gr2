@@ -12,8 +12,7 @@ import numpy as np
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Flatten
-from tensorflow.keras.layers import Conv2D, MaxPool2D
+from tensorflow.keras.layers import Conv2D, MaxPool2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 
@@ -59,8 +58,8 @@ def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filte
      model.add(MaxPool2D(pool_size = pool_size))
 
      model.add(Conv2D(second_filters, (6,6), activation = 'relu', padding = 'valid'))
-     model.add(Conv2D(1, (1,1), activation = 'sigmoid', padding = 'valid'))
-     model.add(Flatten())
+     model.add(Conv2D(1, (1,1), activation = 'sigmoid', padding = 'same'))
+     model.add(GlobalAveragePooling2D())
 
      # compile the model
      model.compile(SGD(learning_rate=0.01, momentum=0.95), loss = 'binary_crossentropy', metrics=['accuracy'])
