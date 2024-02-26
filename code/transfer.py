@@ -71,11 +71,11 @@ model.compile(SGD(learning_rate=0.001, momentum=0.95), loss = 'binary_crossentro
 model.summary()
 
 # get the data generators
-train_gen, val_gen = get_pcam_generators('/change/me/to/dataset/path')
+train_gen, val_gen = get_pcam_generators('C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data')
 
 
 # save the model and weights
-model_name = 'my_first_transfer_model'
+model_name = 'my_second_transfer_model'
 model_filepath = model_name + '.json'
 weights_filepath = model_name + '_weights.hdf5'
 
