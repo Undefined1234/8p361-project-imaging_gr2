@@ -46,17 +46,18 @@ def get_pcam_generators(base_dir, train_batch_size=32, val_batch_size=32):
 
      return train_gen, val_gen
 
-def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filters=64):
+def get_model_fcn(kernel_size=(3,3), stride_size=(4,4), first_filters=32, second_filters=64):
 
      # build the model
      model = Sequential()
 
      model.add(Conv2D(first_filters, kernel_size, activation = 'relu', padding = 'same', input_shape = (IMAGE_SIZE, IMAGE_SIZE, 3)))
-     model.add(MaxPool2D(pool_size = pool_size))
+     model.add(Conv2D(first_filters, kernel_size, stride_size, activation = 'relu', padding = 'same'))
 
      model.add(Conv2D(second_filters, kernel_size, activation = 'relu', padding = 'same'))
-     model.add(MaxPool2D(pool_size = pool_size))
+     model.add(Conv2D(second_filters, kernel_size, stride_size, activation = 'relu', padding = 'same'))
 
+     # Replacement layers to create FCN model (explained in pdf)
      model.add(Conv2D(second_filters, (6,6), activation = 'relu', padding = 'valid'))
      model.add(Conv2D(1, (1,1), activation = 'sigmoid', padding = 'same'))
      model.add(GlobalAveragePooling2D())
@@ -68,13 +69,13 @@ def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filte
 
 
 # get the model
-model = get_model()
+model = get_model_fcn()
 
 # get the data generators
 train_gen, val_gen = get_pcam_generators('C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data')
 
 # save the model and weights
-model_name = 'my_second_cnn_model'
+model_name = 'fcn_model'
 model_filepath = model_name + '.json'
 weights_filepath = model_name + '_weights.hdf5'
 
@@ -82,12 +83,10 @@ model_json = model.to_json() # serialize model to JSON
 with open(model_filepath, 'w') as json_file:
     json_file.write(model_json)
 
-
 # define the model checkpoint and Tensorboard callbacks
 checkpoint = ModelCheckpoint(weights_filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 tensorboard = TensorBoard(os.path.join('logs', model_name))
 callbacks_list = [checkpoint, tensorboard]
-
 
 # train the model
 train_steps = train_gen.n//train_gen.batch_size
