@@ -69,7 +69,7 @@ def get_model_convpool_cnn(kernel_size=(3,3), pool_size=(4,4), first_filters=32,
 
 
 # get the model
-model = get_model_convpool_cnn()
+model_convpool_cnn = get_model_convpool_cnn()
 
 # get the data generators
 train_gen, val_gen = get_pcam_generators('C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data')
@@ -79,7 +79,7 @@ model_name = 'convpool_cnn_model'
 model_filepath = model_name + '.json'
 weights_filepath = model_name + '_weights.hdf5'
 
-model_json = model.to_json() # serialize model to JSON
+model_json = model_convpool_cnn.to_json() # serialize model to JSON
 with open(model_filepath, 'w') as json_file:
     json_file.write(model_json)
 
@@ -92,16 +92,16 @@ callbacks_list = [checkpoint, tensorboard]
 train_steps = train_gen.n//train_gen.batch_size
 val_steps = val_gen.n//val_gen.batch_size
 
-history = model.fit(train_gen, steps_per_epoch=train_steps,
-                    validation_data=val_gen,
-                    validation_steps=val_steps,
-                    epochs=3,
-                    callbacks=callbacks_list)
+history = model_convpool_cnn.fit(train_gen, steps_per_epoch=train_steps,
+                                 validation_data=val_gen,
+                                 validation_steps=val_steps,
+                                 epochs=3,
+                                 callbacks=callbacks_list)
 
 # ROC analysis
 # Getting labels and predictions on validation set
 val_true = val_gen.classes
-val_probs = model.predict(val_gen, steps=val_steps)
+val_probs = model_convpool_cnn.predict(val_gen, steps=val_steps)
 
 # Calculating false positive rate (fpr), true positive rate (tpr) and AUC
 fpr, tpr, thresholds = roc_curve(val_true, val_probs)
