@@ -72,7 +72,7 @@ def get_model(kernel_size=(3,3), pool_size=(4,4), first_filters=32, second_filte
 # get the model
 model = get_model()
 
-# get the data generators
+# get the data generators (change to personal path!)
 train_gen, val_gen = get_pcam_generators('C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data')
 
 # save the model and weights
