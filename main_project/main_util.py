@@ -86,7 +86,7 @@ class Model_transform:
     """Class used as preprocessing function. Responsible for data augmentation with autoencoder model."""
 
     def __init__(self, ae_model):
-        self.ae_model_1 = ae_model
+        self.ae_model = ae_model
 
     def model_transform(self, tensor):
         tensor_adjusted = utils.img_to_array(tensor)
