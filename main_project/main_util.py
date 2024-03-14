@@ -60,25 +60,25 @@ class Model_architecture(Sequential):
         self.add(Conv2D(1, (1,1), activation="sigmoid", padding="same"))
         self.add(GlobalAveragePooling2D())
 
-    def compile_cnn(self):
-        self.compile(SGD(learning_rate=0.01, momentum=0.95), loss="binary_crossentropy", metrics=["accuracy"])
+    def compile_cnn(self, learning_rate=0.01, momentum=0.95):
+        self.compile(SGD(learning_rate=learning_rate, momentum=momentum), loss="binary_crossentropy", metrics=["accuracy"])
 
     def create_autoencoder(self, kernel_size=(3,3), pool_size=(2,2), first_filters=32, second_filters=16):
         # Encoder
         self.add(Conv2D(first_filters, kernel_size, activation="relu", padding="same"))
         self.add(MaxPool2D(pool_size, padding="same"))
         self.add(Conv2D(second_filters, kernel_size, activation="relu", padding="same"))
-        self.add(MaxPool2D(pool_size, padding='same'))
+        self.add(MaxPool2D(pool_size, padding="same"))
 
         # Decoder
         self.add(Conv2D(second_filters, kernel_size, activation="relu", padding="same"))
         self.add(UpSampling2D(pool_size))
         self.add(Conv2D(first_filters, kernel_size, activation="relu", padding="same"))
         self.add(UpSampling2D(pool_size))
-        self.add(Conv2D(3, kernel_size, activation="sigmoid", padding="same'"))
+        self.add(Conv2D(3, kernel_size, activation="sigmoid", padding="same"))
 
-    def compile_autoencoder(self):
-        self.compile(Adam(learning_rate=0.001), loss="mean_squared_error")
+    def compile_autoencoder(self, learning_rate=0.001):
+        self.compile(Adam(learning_rate=learning_rate), loss="mean_squared_error")
 
 
 # Written by Constantijn
