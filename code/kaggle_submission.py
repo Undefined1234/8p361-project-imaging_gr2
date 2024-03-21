@@ -14,22 +14,23 @@ import glob
 import pandas as pd
 from matplotlib.pyplot import imread
 
-from tensorflow.keras.models import model_from_json
+from tensorflow.keras.models import load_model
+from tensorflow.keras import backend
 
 #Change these variables to point at the locations and names of the test dataset and your models.
-TEST_PATH = 'C:/Datasets/test/' 
-MODEL_FILEPATH = 'my_first_cnn_model.json' 
-MODEL_WEIGHTS_FILEPATH = 'my_first_cnn_model_weights.hdf5'
+TEST_PATH = 'C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data/test' 
+#MODEL_FILEPATH = 'C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/main project/trained_models/cnn_augmented_100_regular_0.json' 
+MODEL_FILEPATH = 'C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/main project/trained_models/cnn_augmented_100_regular_0.tf'
 
 # load model and model weights
-json_file = open(MODEL_FILEPATH, 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-model = model_from_json(loaded_model_json)
+#json_file = open(MODEL_FILEPATH, 'r')
+#loaded_model_json = json_file.read()
+#json_file.close()
+#model = model_from_json(MODEL_FILEPATH)
 
 
 # load weights into new model
-model.load_weights(MODEL_WEIGHTS_FILEPATH)
+model = load_model(MODEL_FILEPATH)
 
 
 # open the test set in batches (as it is a very big dataset) and make predictions
@@ -61,8 +62,9 @@ for idx in range(0, max_idx, file_batch):
     
     test_df['label'] = predictions
     submission = pd.concat([submission, test_df[['id', 'label']]])
+    backend.clear_session()
 
 
 # save your submission
 submission.head()
-submission.to_csv('submission.csv', index = False, header = True)
+submission.to_csv('submission_aug_factor_1.csv', index = False, header = True)
