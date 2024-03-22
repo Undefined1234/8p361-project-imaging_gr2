@@ -15,20 +15,24 @@ import pandas as pd
 from matplotlib.pyplot import imread
 
 from tensorflow.keras.models import model_from_json
+from tensorflow.keras.models import load_model
 
 #Change these variables to point at the locations and names of the test dataset and your models.
-TEST_PATH = 'C:/Datasets/test/' 
-MODEL_FILEPATH = 'my_first_cnn_model.json' 
-MODEL_WEIGHTS_FILEPATH = 'my_first_cnn_model_weights.hdf5'
+BASE_PATH = 'C:/Users/20212238/OneDrive - TU Eindhoven/Documents/TUE/Jaar 3/Project AI MIA/'
+TEST_PATH = BASE_PATH + 'test/' 
+MODEL_FILEPATH = BASE_PATH + '8p361-project-imaging_gr2/main_project/trained_models/cnn_augmented.tf' 
+MODEL_WEIGHTS_FILEPATH = BASE_PATH + '8p361-project-imaging_gr2/main_project/trained_models/cnn_augmented_weights.hdf5'
 
 # load model and model weights
-json_file = open(MODEL_FILEPATH, 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-model = model_from_json(loaded_model_json)
 
+# json_file = open(MODEL_FILEPATH, 'r')
+# loaded_model_json = json_file.read()
+# json_file.close()
+# model = model_from_json(loaded_model_json)
+model = load_model(MODEL_FILEPATH)
 
 # load weights into new model
+
 model.load_weights(MODEL_WEIGHTS_FILEPATH)
 
 
@@ -65,4 +69,4 @@ for idx in range(0, max_idx, file_batch):
 
 # save your submission
 submission.head()
-submission.to_csv('submission.csv', index = False, header = True)
+submission.to_csv('submission_cnn_augmented_50.csv', index = False, header = True)
