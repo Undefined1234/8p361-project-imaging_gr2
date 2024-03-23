@@ -1,0 +1,16 @@
+WILDS: A Benchmark of in-the-Wild Distribution Shifts. Pang Wei 
+Koh*, Shiori Sagawa*, Henrik Marklund, Sang Michael Xie, Marvin 
+Zhang, Akshay Balsubramani, Weihua Hu, Michihiro Yasunaga, 
+Richard Lanas Phillips, Irena Gao, Tony Lee, Etienne David, 
+Ian Stavness, Wei Guo, Berton A. Earnshaw, Imran S. Haque, 
+Sara Beery, Jure Leskovec, Anshul Kundaje, Emma Pierson, 
+Sergey Levine, Chelsea Finn, and Percy Liang. ICML 2021.
+
+P. Bándi et al., "From Detection of Individual Metastases to 
+Classification of Lymph Node Status at the Patient Level: 
+The CAMELYON17 Challenge," in IEEE Transactions on Medical 
+Imaging, vol. 38, no. 2, pp. 550-560, Feb. 2019, 
+doi: 10.1109/TMI.2018.2867350. keywords: 
+{Lymph nodes;Biomedical imaging;Tumors;Metastasis;Pathology;
+Hospitals;Breast cancer;sentinel lymph node;lymph node 
+metastases;whole-slide images;grand challenge},

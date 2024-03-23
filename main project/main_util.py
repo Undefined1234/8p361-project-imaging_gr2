@@ -5,14 +5,16 @@ Author: Group 2
 """
 # Library imports
 import os
+import random
 import numpy as np
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, GlobalAveragePooling2D, Input, MaxPool2D, UpSampling2D
 from tensorflow.keras import utils
-from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam, SGD, Adadelta
 from tensorflow.keras import backend
+
 
 
 def get_pcam_generators(base_dir, train_batch_size=32, val_batch_size=32, class_mode="binary", prep_function=None):
@@ -60,9 +62,9 @@ class Model_architecture(Sequential):
         self.add(Conv2D(1, (1,1), activation="sigmoid", padding="same"))
         self.add(GlobalAveragePooling2D())
 
-    def compile_cnn(self, learning_rate=0.01, momentum=0.95):
-        self.compile(SGD(learning_rate=learning_rate, momentum=momentum), loss="binary_crossentropy", metrics=["accuracy"])
-
+    def compile_cnn(self, learning_rate=0.001):
+        self.compile(Adam(learning_rate=learning_rate), loss="binary_crossentropy", metrics=["accuracy"])
+               
     def create_autoencoder(self, kernel_size=(3,3), pool_size=(2,2), first_filters=32, second_filters=16):
         # Encoder
         self.add(Conv2D(first_filters, kernel_size, activation="relu", padding="same"))
@@ -85,13 +87,22 @@ class Model_architecture(Sequential):
 class Model_transform:
     """Class used as preprocessing function. Responsible for data augmentation with autoencoder model."""
 
-    def __init__(self, ae_model):
+    def __init__(self, ae_model, augmentation_factor=1):
+        """
+        Args: 
+        ae_model: autoencoder model
+        augmentation_factor: float between 0 and 1, determines the amount of data augmentation. 1 being only augmented data and 0 beging only original data. 
+        """
         self.ae_model = ae_model
+        self.augmentation_factor = augmentation_factor
+        self.choices = [0 , 1]
+        self.weights = [1-augmentation_factor, augmentation_factor]
 
     def model_transform(self, tensor):
-        tensor_adjusted = utils.img_to_array(tensor)
-        tensor_adjusted = np.array([tensor_adjusted])
-        tensor_adjusted_prediction = self.ae_model.predict(tensor_adjusted/255, verbose=None)[0]
-        backend.clear_session()
-        
-        return tensor_adjusted_prediction*255
+        if random.choices(self.choices, weights=self.weights)[0]:
+            tensor_adjusted = utils.img_to_array(tensor)
+            tensor_adjusted = np.array([tensor_adjusted])
+            tensor_adjusted_prediction = self.ae_model.predict(tensor_adjusted/255, verbose=None)[0]
+            backend.clear_session()
+            return tensor_adjusted_prediction*255
+        return tensor
