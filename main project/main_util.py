@@ -26,19 +26,19 @@ def get_pcam_generators(base_dir, train_batch_size=32, val_batch_size=32, class_
     RESCALING_FACTOR = 1./255
 
     # Instantiate data generators with correct preprocessing function
-    datagen = ImageDataGenerator(rescale=RESCALING_FACTOR, preprocessing_function=prep_function)
+    datagen_train = ImageDataGenerator(rescale=RESCALING_FACTOR, preprocessing_function=prep_function)
+    datagen_val = ImageDataGenerator(rescale=RESCALING_FACTOR)
 
-    train_gen = datagen.flow_from_directory(TRAIN_PATH,
-                                            target_size=(96,96),
-                                            batch_size=train_batch_size,
-                                            class_mode=class_mode)
+    train_gen = datagen_train.flow_from_directory(TRAIN_PATH,
+                                                  target_size=(96,96),
+                                                  batch_size=train_batch_size,
+                                                  class_mode=class_mode)
 
-
-    val_gen = datagen.flow_from_directory(VALID_PATH,
-                                          target_size=(96,96),
-                                          batch_size=val_batch_size,
-                                          class_mode=class_mode,
-                                          shuffle=False)
+    val_gen = datagen_val.flow_from_directory(VALID_PATH,
+                                              target_size=(96,96),
+                                              batch_size=val_batch_size,
+                                              class_mode=class_mode,
+                                              shuffle=False)
      
     return train_gen, val_gen
 
