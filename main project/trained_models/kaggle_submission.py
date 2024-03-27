@@ -18,8 +18,9 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras import backend
 
 #Change these variables to point at the locations and names of the test dataset and your models.
+model_name = "cnn_augmented_1"
 TEST_PATH = 'C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/data/test' 
-MODEL_FILEPATH = 'C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/main project/trained_models/cnn_augmentation_025.tf'
+MODEL_FILEPATH = f'C:/Users/20212077/OneDrive - TU Eindhoven/Desktop/8P361 - DBL AI for MIA/8p361-project-imaging_gr2/main project/trained_models/{model_name}.tf'
 
 
 # load weights into new model
@@ -60,4 +61,4 @@ for idx in range(0, max_idx, file_batch):
 
 # save your submission
 submission.head()
-submission.to_csv('submission_aug_factor_025.csv', index = False, header = True)
+submission.to_csv(f'submission_{model_name}.csv', index = False, header = True)
