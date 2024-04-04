@@ -123,7 +123,7 @@ def evaluation_pcam17(model, patch_folder_path, testing_metadata):
     """
     Args
     model:              model object to perform predictions.
-    patch_folder_path:  string containing the filepath to the patches folder.
+    patch_folder_path:  string containing the filepath to the patches folder.get
     testing_metadata:   numpy array containing the metadata of the testing set with the following columns:
                         index, patient nr, node nr, x-coordinate, y-coordinate, label, slide nr, split nr
     """
